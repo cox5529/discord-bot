@@ -19,8 +19,8 @@ namespace Discord_bot.Services {
             return await resp.Content.ReadAsStreamAsync();
         }
 
-        public async Task<Stream> GetBigQingus() {
-            using (var fileStream = new FileStream(_configuration.GetSection("images")["big_qingus"], FileMode.Open)) {
+        public async Task<Stream> GetLocalImage(string filename) {
+            using (var fileStream = new FileStream(_configuration.GetSection("images")[filename], FileMode.Open)) {
                 Stream s = new MemoryStream();
                 await fileStream.CopyToAsync(s);
                 return s;

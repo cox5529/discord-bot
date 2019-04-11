@@ -20,9 +20,16 @@ namespace Discord_bot.Modules {
             await Context.Channel.SendFileAsync(stream, "cat.png");
         }
 
+        [Command("humpday")]
+        public async Task HumpDayAsync() {
+            var stream = await PictureService.GetLocalImage("dave_camel");
+            stream.Seek(0, SeekOrigin.Begin);
+            await Context.Channel.SendFileAsync(stream, "hump_day.png");
+        }
+
         [Command("bigqingus")]
         public async Task BigQingusAsync() {
-            var stream = await PictureService.GetBigQingus();
+            var stream = await PictureService.GetLocalImage("big_qingus");
             stream.Seek(0, SeekOrigin.Begin);
             await Context.Channel.SendFileAsync(stream, "big_qingus.png");
         }
