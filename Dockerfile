@@ -4,7 +4,7 @@ WORKDIR /app
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY Discord_bot.csproj ./
-RUN dotnet restore /Discord_bot.csproj
+RUN dotnet restore Discord_bot.csproj
 COPY . .
 WORKDIR /src/
 RUN dotnet build Discord_bot.csproj -c Release -o /app
