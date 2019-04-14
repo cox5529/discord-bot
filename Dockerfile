@@ -1,11 +1,18 @@
-FROM microsoft/dotnet:2.2-sdk AS build-env
+FROM microsoft/dotnet:2.2-runtime AS base
 WORKDIR /app
 
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
-RUN dotnet restore
+FROM microsoft/dotnet:2.2-sdk AS build
+WORKDIR /src
+COPY Discord_bot.csproj ./
+RUN dotnet restore /Discord_bot.csproj
+COPY . .
+WORKDIR /src/
+RUN dotnet build Discord_bot.csproj -c Release -o /app
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
-ENTRYPOINT ["dotnet", "run"]
+FROM build AS publish
+RUN dotnet publish Discord_bot.csproj -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "Discord_bot.dll"]

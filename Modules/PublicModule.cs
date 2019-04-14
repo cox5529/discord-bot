@@ -1,13 +1,18 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
+using Discord_bot.Models;
 using Discord_bot.Services;
 
 namespace Discord_bot.Modules {
     public class PublicModule : ModuleBase<SocketCommandContext> {
-        public PictureService _pictureService { get; set; }
-        public ConfigurationService _configurationService { get; set; }
+        public PictureService PictureService { get; set; }
+        public ConfigurationService ConfigurationService { get; set; }
+        public EnrollmentService EnrollmentService { get; set; }
 
         [Command("ping")]
         [Alias("pong", "hello")]
@@ -16,41 +21,64 @@ namespace Discord_bot.Modules {
 
         [Command("cat")]
         public async Task CatAsync() {
-            var stream = await _pictureService.GetCatPictureAsync();
+            var stream = await PictureService.GetCatPictureAsync();
             stream.Seek(0, SeekOrigin.Begin);
             await Context.Channel.SendFileAsync(stream, "cat.png");
         }
 
         [Command("humpday")]
         public async Task HumpDayAsync() {
-            var stream = await _pictureService.GetLocalImage("dave_camel");
+            var stream = await PictureService.GetLocalImage("dave_camel");
             stream.Seek(0, SeekOrigin.Begin);
             await Context.Channel.SendFileAsync(stream, "hump_day.png");
         }
 
         [Command("bigqingus")]
         public async Task BigQingusAsync() {
-            var stream = await _pictureService.GetLocalImage("big_qingus");
+            var stream = await PictureService.GetLocalImage("big_qingus");
             stream.Seek(0, SeekOrigin.Begin);
             await Context.Channel.SendFileAsync(stream, "big_qingus.png");
         }
 
         [Command("semester")]
         public async Task SetSemesterTaskAsync(int? semester) {
-            var channelConfig = await _configurationService.ReadChannelAsync(Context.Channel.Id);
+            var channelConfig = await ConfigurationService.ReadChannelAsync(Context.Channel.Id);
             if (semester != null) {
                 channelConfig.Semester = semester.Value;
-                await _configurationService.WriteChannelAsync(channelConfig);
+                await ConfigurationService.WriteChannelAsync(channelConfig);
                 await Context.Channel.SendMessageAsync("Semester has been set to " + semester);
             } else {
                 await Context.Channel.SendMessageAsync("Current semester is set to " + channelConfig.Semester);
             }
         }
 
-        [Command("enroll")]
-        public async Task GetEnrollmentAsync() {
-            var channelConfig = await _configurationService.ReadChannelAsync(Context.Channel.Id);
+        [Command("course")]
+        public async Task GetEnrollmentAsync(params string[] options) {
+            var channelConfig = await ConfigurationService.ReadChannelAsync(Context.Channel.Id);
+            List<CourseModel> courses;
+            switch (options.Length) {
+                case 0:
+                    await Context.Channel.SendMessageAsync(
+                        "No results were fetched because no parameters were specified.");
+                    return;
+                case 1:
+                    courses = await EnrollmentService.GetCoursesById(channelConfig.Semester, options[0], "");
+                    break;
+                case 2:
+                    courses = await EnrollmentService.GetCoursesById(channelConfig.Semester, options[0], options[1]);
+                    break;
+                default:
+                    return;
+            }
 
+            var table = new Table<CourseModel> {Data = courses};
+            table.AddColumn("Catalog", x => x.Department + " " + x.CatalogNumber);
+            table.AddColumn("Section", x => x.SectionNumber);
+            table.AddColumn("Title", x => x.Name);
+            table.AddColumn("Instructor", x => x.Instructor);
+            table.AddColumn("Enrollment", x => x.Enrolled + "/" + x.Size);
+
+            await SplitAndSendMessageAsync(Context.Channel, "```" + table.BuildTable() + "```");
         }
 
         [Command("userinfo")]
@@ -66,6 +94,39 @@ namespace Discord_bot.Modules {
         [Command("list")]
         public Task ListAsync(params string[] objects)
             => ReplyAsync("You listed: " + string.Join("; ", objects));
+
+        private async Task SplitAndSendMessageAsync(ISocketMessageChannel channel, string message) {
+            var messages = new List<string>();
+            var limit = 2000;
+            var prefix = "";
+            var postfix = "";
+            if (message.StartsWith("```")) {
+                limit = 1994;
+                prefix = "```";
+                postfix = "```";
+            }
+
+            while (message.Length > limit) {
+                var index = limit;
+                if (message.Substring(0, limit).Contains("\n")) {
+                    index = message.Substring(0, limit).LastIndexOf("\n", StringComparison.Ordinal);
+                }
+
+                messages.Add(message.Substring(0, index));
+                message = message.Substring(index);
+            }
+
+            if (message.Length > 0) {
+                messages.Add(message);
+            }
+
+            foreach (var s in messages) {
+                var toSend = s;
+                if (!toSend.StartsWith(prefix)) toSend = prefix + s;
+                if (!toSend.EndsWith(postfix)) toSend += postfix;
+                await channel.SendMessageAsync(toSend);
+            }
+        }
     }
 }
 
@@ -73,7 +134,7 @@ namespace Discord_bot.Modules {
 /*
 TODO:
 
-1. Query enrollment in a specific section
+1. SQL style enrollment queries
 2. Spam bot
 
  */

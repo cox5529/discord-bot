@@ -3,3 +3,7 @@ obj
 .vscode
 *.png
 appsettings.json
+/.vs/Discord_bot
+/docker-compose.yml
+/docker-compose.override.yml
+/docker-compose.dcproj
