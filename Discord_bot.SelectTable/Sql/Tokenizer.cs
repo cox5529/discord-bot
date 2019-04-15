@@ -176,13 +176,14 @@ namespace Discord_bot.SelectTable.Sql {
             var inLiteral = false;
             var literalStart = '"';
             foreach (var c in query) {
-                if (literalDelimiter.Contains(c)) {
+                if (!inLiteral && literalDelimiter.Contains(c)) {
                     inLiteral = true;
                     literalStart = c;
-                } else if ((splitOnInclude.Contains(c) || splitOnExclude.Contains(c)) &&
-                           !string.IsNullOrWhiteSpace(s)) {
-                    result.Add(s);
-                    s = "";
+                } else if ((splitOnInclude.Contains(c) || splitOnExclude.Contains(c))) {
+                    if (!string.IsNullOrWhiteSpace(s)) {
+                        result.Add(s);
+                        s = "";
+                    }
 
                     if (splitOnInclude.Contains(c)) {
                         result.Add(c + "");

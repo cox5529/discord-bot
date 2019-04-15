@@ -26,7 +26,7 @@ namespace Discord_bot.Services {
         }
 
         private async Task<List<CourseModel>> GetCourses(CourseModel query) {
-            var client = new RestClient("https://scheduleofclasses.uark.edu/Main?strm=1199");
+            var client = new RestClient(_configuration["courses_url"] + "?strm=" + query.Semester);
             var request = new RestRequest(Method.POST);
             request.AddHeader("cache-control", "no-cache");
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
