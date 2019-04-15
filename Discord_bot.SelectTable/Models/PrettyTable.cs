@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Discord_bot.SelectTable.Models {
-    public class Table<T> {
+    public class PrettyTable<T> {
         public List<T> Data { get; set; }
 
         private List<Column<T>> Columns { get; }
 
-        public Table() {
+        public PrettyTable() {
             Data = new List<T>();
             Columns = new List<Column<T>>();
         }

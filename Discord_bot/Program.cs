@@ -53,6 +53,7 @@ namespace Discord_bot {
                 .AddSingleton<PictureService>()
                 .AddSingleton<ConfigurationService>()
                 .AddSingleton<EnrollmentService>()
+                .AddSingleton<CourseDatabaseService>()
                 .AddSingleton(_configuration)
                 .BuildServiceProvider();
         }

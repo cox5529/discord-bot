@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Discord_bot.Models;
+using Discord_bot.SelectTable.Models;
+using Discord_bot.SelectTable.Sql.MiniDatabase;
 using Discord_bot.Services;
 
 namespace Discord_bot.Modules {
@@ -13,6 +16,7 @@ namespace Discord_bot.Modules {
         public PictureService PictureService { get; set; }
         public ConfigurationService ConfigurationService { get; set; }
         public EnrollmentService EnrollmentService { get; set; }
+        public CourseDatabaseService CourseDatabaseService { get; set; }
 
         [Command("ping")]
         [Alias("pong", "hello")]
@@ -71,12 +75,30 @@ namespace Discord_bot.Modules {
                     return;
             }
 
-            var table = new Table<CourseModel> {Data = courses};
+            var table = new PrettyTable<CourseModel> {Data = courses};
             table.AddColumn("Catalog", x => x.Department + " " + x.CatalogNumber);
             table.AddColumn("Section", x => x.SectionNumber);
             table.AddColumn("Title", x => x.Name);
             table.AddColumn("Instructor", x => x.Instructor);
             table.AddColumn("Enrollment", x => x.Enrolled + "/" + x.Size);
+
+            await SplitAndSendMessageAsync(Context.Channel, "```" + table.BuildTable() + "```");
+        }
+
+        [Command("select")]
+        public async Task QueryCoursesAsync([Remainder] string query) {
+            query = "select " + query;
+
+            var channelConfig = await ConfigurationService.ReadChannelAsync(Context.Channel.Id);
+            CourseDatabaseService.Semester = channelConfig.Semester;
+
+            var data = await CourseDatabaseService.Query(query);
+
+            var table = new PrettyTable<string[]> {Data = data.ToList()};
+            for (var i = 0; i < data[0].Length; i++) {
+                var i1 = i;
+                table.AddColumn(data[0][i], x => x[i1]);
+            }
 
             await SplitAndSendMessageAsync(Context.Channel, "```" + table.BuildTable() + "```");
         }

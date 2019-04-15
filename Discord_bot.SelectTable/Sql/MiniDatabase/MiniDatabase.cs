@@ -14,7 +14,7 @@ namespace Discord_bot.SelectTable.Sql.MiniDatabase {
             Tables = new List<Table<T>>();
         }
 
-        public async Task<Table<T>> FetchMissingTable(string identifier) {
+        public virtual async Task<Table<T>> FetchMissingTable(string identifier) {
             var list = await MissingFunction.Invoke(identifier);
             var table = new Table<T>() {
                 Identifier = identifier,
@@ -75,7 +75,7 @@ namespace Discord_bot.SelectTable.Sql.MiniDatabase {
             }
 
 
-            // Table names
+            // PrettyTable names
             for (var i = index; i < tokens.Count; i++) {
                 var token = tokens[i];
                 if (token.Type == TokenType.TableName) {
