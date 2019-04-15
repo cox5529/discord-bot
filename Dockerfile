@@ -15,7 +15,7 @@ RUN dotnet publish Discord_bot.csproj -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
-COPY *.json ./
-COPY *.png ./
+COPY **/*.json ./
+COPY **/*.png ./
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "Discord_bot.dll"]
