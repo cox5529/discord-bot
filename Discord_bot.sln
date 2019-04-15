@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discord_bot", "Discord_bot.csproj", "{8A6FDACC-1D2F-4AD5-863E-F4F54FCBE584}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discord_bot", "Discord_bot\Discord_bot.csproj", "{8A6FDACC-1D2F-4AD5-863E-F4F54FCBE584}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discord_bot.SelectTable", "..\Discord_bot.SelectTable\Discord_bot.SelectTable.csproj", "{12177319-A4C9-4005-9B4E-28BC2F493E3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discord_bot.SelectTable", "Discord_bot.SelectTable\Discord_bot.SelectTable.csproj", "{12177319-A4C9-4005-9B4E-28BC2F493E3B}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{DA31F714-4BE4-471D-A702-CD2C8FD98905}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discord_bot.Test", "Discord_bot.Test\Discord_bot.Test.csproj", "{BD25CB19-2583-4633-A0A7-353B1816F634}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discord_bot.Test", "..\Discord_bot.Test\Discord_bot.Test.csproj", "{BD25CB19-2583-4633-A0A7-353B1816F634}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{5F018255-EC3F-409B-8249-25794EC1D06A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +25,14 @@ Global
 		{12177319-A4C9-4005-9B4E-28BC2F493E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12177319-A4C9-4005-9B4E-28BC2F493E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12177319-A4C9-4005-9B4E-28BC2F493E3B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA31F714-4BE4-471D-A702-CD2C8FD98905}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA31F714-4BE4-471D-A702-CD2C8FD98905}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA31F714-4BE4-471D-A702-CD2C8FD98905}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA31F714-4BE4-471D-A702-CD2C8FD98905}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BD25CB19-2583-4633-A0A7-353B1816F634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BD25CB19-2583-4633-A0A7-353B1816F634}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD25CB19-2583-4633-A0A7-353B1816F634}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD25CB19-2583-4633-A0A7-353B1816F634}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F018255-EC3F-409B-8249-25794EC1D06A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F018255-EC3F-409B-8249-25794EC1D06A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F018255-EC3F-409B-8249-25794EC1D06A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F018255-EC3F-409B-8249-25794EC1D06A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
