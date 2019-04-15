@@ -4,6 +4,7 @@ WORKDIR /app
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY Discord_bot.csproj ./
+COPY ../Discord_bot.SelectTable/Discord_bot.SelectTable.csproj ../Discord_bot.SelectTable/
 RUN dotnet restore Discord_bot.csproj
 COPY . .
 WORKDIR /src/
@@ -15,6 +16,6 @@ RUN dotnet publish Discord_bot.csproj -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-COPY *.json .
-COPY *.png .
+COPY *.json ./
+COPY *.png ./
 ENTRYPOINT ["dotnet", "Discord_bot.dll"]

@@ -9,7 +9,6 @@ using RestSharp;
 
 namespace Discord_bot.Services {
     public class EnrollmentService {
-        private static HttpClient _client = new HttpClient();
         private readonly ConfigurationService _configurationService;
         private readonly IConfigurationRoot _configuration;
 
