@@ -44,6 +44,13 @@ namespace Discord_bot.Modules {
             await Context.Channel.SendFileAsync(stream, "big_qingus.png");
         }
 
+        [Command("kaqingus")]
+        public async Task KaQingusAsync() {
+            var stream = await PictureService.GetLocalImage("kaqingus");
+            stream.Seek(0, SeekOrigin.Begin);
+            await Context.Channel.SendFileAsync(stream, "kaqingus.png");
+        }
+
         [Command("semester")]
         public async Task SetSemesterTaskAsync(int? semester) {
             var channelConfig = await ConfigurationService.ReadChannelAsync(Context.Channel.Id);
@@ -75,7 +82,7 @@ namespace Discord_bot.Modules {
                     return;
             }
 
-            var table = new PrettyTable<CourseModel> {Data = courses};
+            var table = new PrettyTable<CourseModel> { Data = courses };
             table.AddColumn("Catalog", x => x.Department + " " + x.CatalogNumber);
             table.AddColumn("Section", x => x.SectionNumber);
             table.AddColumn("Title", x => x.Name);
@@ -94,7 +101,7 @@ namespace Discord_bot.Modules {
 
             var data = await CourseDatabaseService.Query(query);
 
-            var table = new PrettyTable<string[]> {Data = data.ToList()};
+            var table = new PrettyTable<string[]> { Data = data.ToList() };
             for (var i = 0; i < data[0].Length; i++) {
                 var i1 = i;
                 table.AddColumn(data[0][i], x => x[i1]);
