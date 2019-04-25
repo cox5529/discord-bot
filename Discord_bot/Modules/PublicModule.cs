@@ -45,6 +45,7 @@ namespace Discord_bot.Modules {
         }
 
         [Command("kaqingus")]
+        [Alias("kaqinghua")]
         public async Task KaQingusAsync() {
             var stream = await PictureService.GetLocalImage("kaqingus");
             stream.Seek(0, SeekOrigin.Begin);
