@@ -32,9 +32,21 @@ namespace Discord_bot.Modules {
 
         [Command("humpday")]
         public async Task HumpDayAsync() {
-            var stream = await PictureService.GetLocalImage("dave_camel");
+            if (DateTime.Now.DayOfWeek == System.DayOfWeek.Wednesday) {
+                var stream = await PictureService.GetLocalImage("dave_camel");
+                stream.Seek(0, SeekOrigin.Begin);
+                await Context.Channel.SendFileAsync(stream, "hump_day.png");
+            } else {
+                await Context.Channel.SendMessageAsync("It isn't Wednesday, you bitch.");
+            }
+        }
+
+        [Command("dave")]
+        [Alias("davedrews")]
+        public async Task DaveAsync() {
+            var stream = await PictureService.GetLocalImage("dave");
             stream.Seek(0, SeekOrigin.Begin);
-            await Context.Channel.SendFileAsync(stream, "hump_day.png");
+            await Context.Channel.SendFileAsync(stream, "dave.png");
         }
 
         [Command("bigqingus")]
